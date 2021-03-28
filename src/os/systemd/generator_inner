@@ -1,0 +1,3 @@
+#!/bin/sh
+# process passwd(5) entries on stdin and creates systemd drop-in config files in a generator dir,
+# which augment user@$uid.service with RequiresMountsFor=$that_users_home_directory .

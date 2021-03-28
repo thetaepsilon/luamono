@@ -1,0 +1,39 @@
+#!/usr/bin/env lua5.1
+-- lua helper to interpret relevant fields from /etc/passwd records.
+
+local rec = assert(..., "no record given as argument!")
+local detail = ": " .. rec
+local checkrec = function(cond, m)
+	if not cond then
+		error(m .. detail)
+	end
+end
+
+-- there are probably more forbidden chars for /etc/passwd,
+-- but for now just splitting on the expected number of colons suffices.
+
+local f = "[^:]*"
+local s = ":"
+local _user = f
+local _pw = f
+local _uid = f
+local _gid = f
+local _comment = f
+local _home = f
+local _shell = f
+local ignored_start = "^" .. _user .. s .. _pw .. s
+local ignored_middle = s .. _gid .. s .. _comment .. s
+local ignored_end = s .. _shell .. "$"
+
+local pat = ignored_start .. "(".._uid..")" .. ignored_middle .. "(".._home..")" .. ignored_end
+
+--print(pat)
+
+local uid, home = rec:match(pat)
+checkrec(uid, "fields missing or bad number of fields")
+assert(home)
+
+print(uid)
+print(home)
+io.stdout:flush()
+
