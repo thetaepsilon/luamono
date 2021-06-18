@@ -7,7 +7,7 @@ function round(x)
 	return floor(x + 0.5)
 end
 
-local t = 1.515151515151515151515151
+local t = assert(tonumber(...))
 
 local fmt_s = "%012.8f"
 local fmt = function(v)
@@ -17,7 +17,13 @@ end
 local smallest_delta = math.huge
 local winner = nil
 
-for i = 1, 50, 1 do
+local limit = 50
+local _limit = os.getenv("limit")
+if _limit then
+	limit = assert(tonumber(_limit))
+end
+
+for i = 1, limit, 1 do
 	local v = t * i
 	local rnd = round(v)
 	local delta = abs(v - rnd)
